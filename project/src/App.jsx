@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react'
-import movieLogo from '/logo (1).png'
-import Search from './components/Search.jsx'
+import { updateSearchCount, getTrendingMovies } from './appwrite.js'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
+
+import movieLogo from '/logo (1).png'
+
+import Search from './components/Search.jsx'
 import Spinner from './components/Spinner.jsx'
 import Pages from './components/Pages.jsx'
 import MovieCard from './components/MovieCard.jsx'
-import { updateSearchCount, getTrendingMovies } from './appwrite.js'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MovieDetail from './components/MovieDetail.jsx'; // Create this component
+import MovieDetail from './components/MovieDetail.jsx'; 
+
 
 //API
 const API_BASE_URL = 'https://api.themoviedb.org/3'
@@ -107,7 +110,7 @@ function App() {
   return (
     <router>
     <main>
-      <div className="pattern"/>
+      <div className="pattern" />
 
       <div className="wrapper"> 
         <Router>

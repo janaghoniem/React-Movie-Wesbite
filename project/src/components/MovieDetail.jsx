@@ -26,9 +26,9 @@ const getReleaseDate = (dateString) => {
 const getBudget = (amount) => {
   if (!amount) return 'N/A';
   if (amount >= 1_000_000_000) {
-    return `$${(amount / 1_000_000_000).toFixed(2)} Billion`;
+    return `$${(amount / 1_000_000_000).toFixed(1)} Billion`;
   } else if (amount >= 1_000_000) {
-    return `$${(amount / 1_000_000).toFixed(2)} Million`;
+    return `$${(amount / 1_000_000).toFixed(1)} Million`;
   } else {
     return `$${amount.toLocaleString()}`;
   }
@@ -36,9 +36,11 @@ const getBudget = (amount) => {
 
 const MovieDetail = ({trendingMovies}) => {
   const { id } = useParams();
-  const rank = trendingMovies.findIndex(movie => movie.id === id) + 1;
+  const rank = trendingMovies.findIndex(movie => movie.movie_id === parseInt(id)) + 1;  
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState('');
+  console.log(trendingMovies);
+  console.log(rank);
 
   useEffect(() => {
     setError('');
@@ -68,6 +70,14 @@ const MovieDetail = ({trendingMovies}) => {
       <div className="flex-col md:flex-row gap-8">
         <div className="flex md:flex-row items-center justify-between mb-6"> 
             <div className='flex-col'> 
+                <a href="/" className="text-dark-100 bg-light-100/20 rounded inline-flex items-left font-bold text-sm px-3 py-1.5 hover:bg-light-200 transition mb-3">
+                    <img
+                        src="/arrow.svg"
+                        alt="left arrow"
+                        className="w-4 h-4 inline rotate-180 color-white"
+                        style={{ display: 'inline' }}
+                    />
+                </a>
                 <h2 className="text-3xl font-bold mb-2">{movie.title}</h2>
                 <p className='year'>{movie.release_date ? movie.release_date.split('-')[0] : 'N/A'} <span className='ml-1 mr-1'>•</span> {movie.adult ? "R-rated" : "PG-13"} <span className='ml-1 mr-1'>•</span> {movie.runtime ? getRuntime(movie.runtime) : "N/A"} </p>
             </div>
@@ -93,7 +103,7 @@ const MovieDetail = ({trendingMovies}) => {
         style={{
           backgroundImage: movie.backdrop_path
           ? `url(https://image.tmdb.org/t/p/w780${movie.backdrop_path})`
-          : 'none'
+          : '/No-Poster.png'
         }}
       />
     </div>
@@ -159,13 +169,13 @@ const MovieDetail = ({trendingMovies}) => {
             <tr>
               <td className="info-title">Languages</td>
               <td className='movie-info'>
-                {movie.spoken_languages && movie.spoken_languages.length > 0 ? movie.spoken_languages.map(language => (
-                <p
-                    key={language.iso_3166_1}
-                >
-                    {language.name} {movie.spoken_languages.length > 1 ? <span>•</span> : ''}
-                </p>
-                )) : 'N/A'}
+                <div className='flex flex-wrap gap-2'>
+                    {movie.spoken_languages && movie.spoken_languages.length > 0 ? movie.spoken_languages.map((language, idx) => (
+                    <p key={language.id || idx}>
+                        {language.name} {idx < movie.spoken_languages.length - 1 ? <span className='ml-1'>•</span> : ''}
+                    </p>
+                    )) : 'N/A'}
+                </div>
               </td>
             </tr>
             <tr>
@@ -178,7 +188,7 @@ const MovieDetail = ({trendingMovies}) => {
             </tr>
             <tr>
               <td className="info-title">Tagline</td>
-              <td className='movie-info'>{movie.tagline}</td>
+              <td className='movie-info'>{movie.tagline ? movie.tagline : "N/A"}</td>
             </tr>
             <tr>
               <td className="info-title">Production Companies</td>
