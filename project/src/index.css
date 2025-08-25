@@ -102,7 +102,7 @@
   }
 
   .movie-card {
-    @apply bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10;
+    @apply bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10 cursor-pointer hover:shadow-lg hover:shadow-light-100/20 transition-shadow duration-300 ease-in-out;
 
     & img {
       @apply rounded-lg h-auto w-full;
@@ -140,6 +140,55 @@
       @apply text-gray-100 font-medium text-base;
     }
   }
+
+  .movie-detail {
+    @apply bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10 w-full m-20;
+
+    & img {
+      @apply rounded-lg h-auto w-full;
+    }
+
+    & h2 {
+      @apply text-white font-bold text-base line-clamp-1;
+    }
+
+    & .rating {
+      @apply flex flex-row items-center gap-1;
+    }
+
+    & .rating img {
+      @apply size-4 object-contain;
+    }
+
+    & .rating p {
+      @apply text-sm font-bold text-base text-white;
+    }
+
+    & .rating span {
+      @apply text-sm text-gray-100;
+    }
+
+    & .content span {
+      @apply text-sm text-gray-100;
+    }
+
+    & .year {
+      @apply text-gray-100 text-sm text-base mt-1;
+    }
+
+    & tr {
+      @apply border-b-25 border-transparent;
+    }
+
+    & .movie-info {
+      @apply text-white border-r-5 border-transparent pr-2 font-semibold ;
+    }
+
+    & .info-title {
+      @apply  w-35 text-light-100 ; 
+    }
+  }
+
 }
 
 @utility text-gradient {

@@ -3,8 +3,11 @@ import movieLogo from '/logo (1).png'
 import Search from './components/Search.jsx'
 import './App.css'
 import Spinner from './components/Spinner.jsx'
+import Pages from './components/Pages.jsx'
 import MovieCard from './components/MovieCard.jsx'
 import { updateSearchCount, getTrendingMovies } from './appwrite.js'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MovieDetail from './components/MovieDetail.jsx'; // Create this component
 
 //API
 const API_BASE_URL = 'https://api.themoviedb.org/3'
@@ -25,6 +28,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [bouncedSearchTerm, setBouncedSearchTerm] = useState("")
   const [trendingMovies, setTrendingMovies] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
 
   const fetchMovies = async () => {
     setIsLoading(true);
@@ -32,7 +36,7 @@ function App() {
 
     try {
       if(bouncedSearchTerm) {
-        const endpoint = `${API_BASE_URL}/search/movie?query=${bouncedSearchTerm}`;
+        const endpoint = `${API_BASE_URL}/search/movie?query=${bouncedSearchTerm}&page=${currentPage}`;
         const response = await fetch(endpoint, API_OPTIONS)
         
         if (!response.ok) {
@@ -52,7 +56,7 @@ function App() {
         return
       }
 
-      const endpoint = `${API_BASE_URL}/discover/movie?sort-by=popularity.desc`;
+      const endpoint = `${API_BASE_URL}/discover/movie?sort-by=popularity.desc&page=${currentPage}`;
       const response = await fetch(endpoint, API_OPTIONS)
       
       if (!response.ok) {
@@ -98,47 +102,64 @@ function App() {
 
   useEffect(() => {
     fetchMovies();
-  }, [bouncedSearchTerm])
+  }, [bouncedSearchTerm, currentPage]);
 
   return (
+    <router>
     <main>
       <div className="pattern"/>
 
       <div className="wrapper"> 
-        <header>
-          <img src="./hero.png" alt="Hero Banner" />
-          <h1>Find <span className='text-gradient'>Movies</span> You'll Enjoy Without the Hassle</h1>
-          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        </header>
+        <Router>
+          <Routes>
+              <Route path="/" element={
+                <>
+                <header>
+                  <img src="./hero.png" alt="Hero Banner" />
+                  <h1>Find <span className='text-gradient'>Movies</span> You'll Enjoy Without the Hassle</h1>
+                  <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                </header>
 
-        <section className='trending'>
-          <h2>Trending</h2>
-          {trendingErrorMessage ? (
-            <p className="text-red-500">{trendingErrorMessage}</p>
-          ) : (
-          <ul>
-            {trendingMovies.map((movie, index) => (
-                <li key={movie.$id}>
-                  <p>{index + 1}</p>
-                  <img src={movie.poster_url} alt={movie.title} />
-                </li>
-              ))}
-          </ul> )}
-        </section>
+                <section className='trending'>
+                  <h2>Trending</h2>
+                  {trendingErrorMessage ? (
+                    <p className="text-red-500">{trendingErrorMessage}</p>
+                  ) : (
+                  <ul>
+                    {trendingMovies.map((movie, index) => (
+                        <li key={movie.$id}>
+                          <p>{index + 1}</p>
+                          <img src={movie.poster_url} alt={movie.title} />
+                        </li>
+                      ))}
+                  </ul> )}
+                </section>
 
-        <section className='all-movies'>
-          <h2 className='mt-10'>Popular</h2>
-          {isLoading ? (<Spinner />) : errorMessage ? (
-            <p className="text-red-500">{errorMessage}</p>
-          ) : (<ul>
-                {movieList.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))}
-              </ul>)}
-        </section>
-        
+                <section className='all-movies'>
+                  <h2 className='mt-10'>Popular</h2>
+                  {isLoading ? (<Spinner />) : errorMessage ? (
+                    <p className="text-red-500">{errorMessage}</p>
+                  ) : (<ul>
+                        {movieList.map((movie) => (
+                          <MovieCard key={movie.id} movie={movie} onClick/>
+                        ))}
+                      </ul>)}
+                </section>
+
+                <section>
+                  { <Pages 
+                    currentPage={currentPage} 
+                    totalPages={5} 
+                    onPageChange={(page) => setCurrentPage(page)} /> }
+                </section>
+                </>
+              }/>
+              <Route path="/movie/:id" element={<MovieDetail trendingMovies = {trendingMovies} />} />
+            </Routes>
+          </Router>
       </div>
     </main>
+    </router>
   )
 }
 
