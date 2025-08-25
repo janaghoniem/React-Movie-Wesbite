@@ -11,6 +11,7 @@ client
 const database = new Databases(client);
 
 export const updateSearchCount = async (searchTerm, movie) => {
+    searchTerm = searchTerm.strip();
     try {
         // Check if the search term already exists
         const existingRecords = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
@@ -43,7 +44,7 @@ export const getTrendingMovies = async () => {
     try {
         const records = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
             Query.orderDesc('count'),
-            Query.limit(5)
+            Query.limit(100)
         ]);
         return records.documents;
     } catch (error) {

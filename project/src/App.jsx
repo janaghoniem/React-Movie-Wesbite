@@ -3,8 +3,6 @@ import { updateSearchCount, getTrendingMovies } from './appwrite.js'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
 
-import movieLogo from '/logo (1).png'
-
 import Search from './components/Search.jsx'
 import Spinner from './components/Spinner.jsx'
 import Pages from './components/Pages.jsx'
