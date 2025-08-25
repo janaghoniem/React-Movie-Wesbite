@@ -1,8 +1,9 @@
 # React-Movie-Wesbite
 A movie search application built with React, following the "React JS 19 Full Course 2025 | Build an App and Master React in 2 Hours" tutorial by JavaScript Mastery. This project served as a comprehensive learning exercise to solidify my understanding of core React concepts.
 
-## Demo
-screenshots will still be added
+## Results
+<img width="1900" height="4870" alt="Image" src="https://github.com/user-attachments/assets/6751246c-8925-4b8f-8c03-b03ea2c745f2" />
+<img width="1600" height="1680" alt="Image" src="https://github.com/user-attachments/assets/3eb82011-bf32-49bb-928a-dc2e0d71dc09" />
 
 ## Features
 Search Functionality: Users can search for movies by title.
